@@ -1,0 +1,805 @@
+import pandas as pd
+import ast
+
+input_data = "/content/bangalore_cars .xlsx"
+output_data = "/content/bangalore.xlsx"
+
+
+df=pd.read_excel(input_data)
+df.head()
+
+def flatten_dict(d, parent_key=''):
+    flat_dict = {}
+
+    for key, value in d.items():
+        new_key = f"{parent_key}_{key}" if parent_key else key
+
+        if isinstance(value, dict):
+            # Recursively flatten nested dictionaries
+            flat_dict.update(flatten_dict(value, new_key))
+
+        elif isinstance(value, list):
+            # Handle lists: flatten dictionaries inside lists
+            for i, item in enumerate(value):
+                if isinstance(item, dict):
+                    flat_dict.update(flatten_dict(item, f'{new_key}_{i}'))
+                else:
+                    flat_dict[f'{new_key}_{i}'] = item
+        else:
+            # For non-dict, non-list values, add them directly
+            flat_dict[new_key] = value
+
+    return flat_dict
+columns_to_process = ["new_car_detail","new_car_overview","new_car_feature","new_car_specs"]
+structured_data = {}
+
+for col in columns_to_process:
+    flattened_rows = []
+    for row in df[col]:
+        row_data = ast.literal_eval(row)
+        flattened_rows.append(flatten_dict(row_data))
+    structured_data[col] = pd.DataFrame(flattened_rows)
+
+# For carlinks, no need to flatten
+structured_data["car_links"] = df[["car_links"]].copy()
+
+# Combine all flattened dadfbta into a single DataFrame
+bangalore_structured = pd.concat([structured_data["new_car_detail"],
+                      structured_data["new_car_overview"],
+                      structured_data["new_car_feature"],
+                      structured_data["new_car_specs"],
+                      structured_data["car_links"]], axis=1)
+
+# Add a city column
+bangalore_structured["City"] = "Bangalore"
+
+# Save the dataframe to a csv file
+bangalore_structured.to_csv(output_data, index=False)
+
+print(bangalore_structured)
+
+
+df.drop(columns=["car_links"],inplace=True,axis=1)
+
+
+input_data = "/content/chennai_cars.xlsx"
+output_data = "/content/chennai.xlsx"
+
+# df_chennai =pd.read_excel(input_data)
+
+
+df_chennai =pd.read_excel(input_data)
+
+
+def flatten_dict(d, parent_key=''):
+    flat_dict = {}
+
+    for key, value in d.items():
+        new_key = f"{parent_key}_{key}" if parent_key else key
+
+        if isinstance(value, dict):
+            # Recursively flatten nested dictionaries
+            flat_dict.update(flatten_dict(value, new_key))
+
+        elif isinstance(value, list):
+            # Handle lists: flatten dictionaries inside lists
+            for i, item in enumerate(value):
+                if isinstance(item, dict):
+                    flat_dict.update(flatten_dict(item, f'{new_key}_{i}'))
+                else:
+                    flat_dict[f'{new_key}_{i}'] = item
+        else:
+            # For non-dict, non-list values, add them directly
+            flat_dict[new_key] = value
+
+    return flat_dict
+columns_to_process = ["new_car_detail","new_car_overview","new_car_feature","new_car_specs"]
+structured_data = {}
+
+for col in columns_to_process:
+    flattened_rows = []
+    for row in df_chennai[col]:
+        row_data = ast.literal_eval(row)
+        flattened_rows.append(flatten_dict(row_data))
+    structured_data[col] = pd.DataFrame(flattened_rows)
+
+# For carlinks, no need to flatten
+structured_data["car_links"] = df_chennai[["car_links"]].copy()
+
+# Combine all flattened data into a single DataFrame
+Chennai_structured = pd.concat([structured_data["new_car_detail"],
+                      structured_data["new_car_overview"],
+                      structured_data["new_car_feature"],
+                      structured_data["new_car_specs"],
+                      structured_data["car_links"]], axis=1)
+
+# Add a city column
+Chennai_structured["City"] = "Chennai"
+
+# Save the dataframe to a csv file
+Chennai_structured.to_csv(output_data, index=False)
+
+print(Chennai_structured)
+
+
+input_data = "/content/delhi_cars.xlsx"
+output_data = "/content/delhi.xlsx"
+
+
+df_delhi =pd.read_excel(input_data)
+
+
+def flatten_dict(d, parent_key=''):
+    flat_dict = {}
+
+    for key, value in d.items():
+        new_key = f"{parent_key}_{key}" if parent_key else key
+
+        if isinstance(value, dict):
+            # Recursively flatten nested dictionaries
+            flat_dict.update(flatten_dict(value, new_key))
+
+        elif isinstance(value, list):
+            # Handle lists: flatten dictionaries inside lists
+            for i, item in enumerate(value):
+                if isinstance(item, dict):
+                    flat_dict.update(flatten_dict(item, f'{new_key}_{i}'))
+                else:
+                    flat_dict[f'{new_key}_{i}'] = item
+        else:
+            # For non-dict, non-list values, add them directly
+            flat_dict[new_key] = value
+
+    return flat_dict
+columns_to_process = ["new_car_detail","new_car_overview","new_car_feature","new_car_specs"]
+structured_data = {}
+
+for col in columns_to_process:
+    flattened_rows = []
+    for row in df_delhi[col]:
+        row_data = ast.literal_eval(row)
+        flattened_rows.append(flatten_dict(row_data))
+    structured_data[col] = pd.DataFrame(flattened_rows)
+
+# For carlinks, no need to flatten
+structured_data["car_links"] = df_delhi[["car_links"]].copy()
+
+# Combine all flattened data into a single DataFrame
+delhi_structured = pd.concat([structured_data["new_car_detail"],
+                      structured_data["new_car_overview"],
+                      structured_data["new_car_feature"],
+                      structured_data["new_car_specs"],
+                      structured_data["car_links"]], axis=1)
+
+# Add a city column
+delhi_structured["City"] = "Delhi"
+
+# Save the dataframe to a csv file
+delhi_structured.to_csv(output_data, index=False)
+
+print(delhi_structured)
+
+
+input_data = "/content/hyderabad_cars.xlsx"
+output_data = "/content/hyderabad.xlsx"
+
+df_hyderabad =pd.read_excel(input_data)
+
+
+def flatten_dict(d, parent_key=''):
+    flat_dict = {}
+
+    for key, value in d.items():
+        new_key = f"{parent_key}_{key}" if parent_key else key
+
+        if isinstance(value, dict):
+            # Recursively flatten nested dictionaries
+            flat_dict.update(flatten_dict(value, new_key))
+
+        elif isinstance(value, list):
+            # Handle lists: flatten dictionaries inside lists
+            for i, item in enumerate(value):
+                if isinstance(item, dict):
+                    flat_dict.update(flatten_dict(item, f'{new_key}_{i}'))
+                else:
+                    flat_dict[f'{new_key}_{i}'] = item
+        else:
+            # For non-dict, non-list values, add them directly
+            flat_dict[new_key] = value
+
+    return flat_dict
+columns_to_process = ["new_car_detail","new_car_overview","new_car_feature","new_car_specs"]
+structured_data = {}
+
+for col in columns_to_process:
+    flattened_rows = []
+    for row in df_hyderabad[col]:
+        row_data = ast.literal_eval(row)
+        flattened_rows.append(flatten_dict(row_data))
+    structured_data[col] = pd.DataFrame(flattened_rows)
+
+# For carlinks, no need to flatten
+structured_data["car_links"] = df_hyderabad[["car_links"]].copy()
+
+# Combine all flattened data into a single DataFrame
+hyderabad_structured = pd.concat([structured_data["new_car_detail"],
+                      structured_data["new_car_overview"],
+                      structured_data["new_car_feature"],
+                      structured_data["new_car_specs"],
+                      structured_data["car_links"]], axis=1)
+
+# Add a city column
+hyderabad_structured["City"] = "Hyderabad"
+
+# Save the dataframe to a csv file
+hyderabad_structured.to_csv(output_data, index=False)
+
+print(hyderabad_structured)
+
+
+input_data = "/content/jaipur_cars.xlsx"
+output_data = "/content/jaipur.xlsx"
+
+
+df_jaipur =pd.read_excel(input_data)
+
+
+def flatten_dict(d, parent_key=''):
+    flat_dict = {}
+
+    for key, value in d.items():
+        new_key = f"{parent_key}_{key}" if parent_key else key
+
+        if isinstance(value, dict):
+            # Recursively flatten nested dictionaries
+            flat_dict.update(flatten_dict(value, new_key))
+
+        elif isinstance(value, list):
+            # Handle lists: flatten dictionaries inside lists
+            for i, item in enumerate(value):
+                if isinstance(item, dict):
+                    flat_dict.update(flatten_dict(item, f'{new_key}_{i}'))
+                else:
+                    flat_dict[f'{new_key}_{i}'] = item
+        else:
+            # For non-dict, non-list values, add them directly
+            flat_dict[new_key] = value
+
+    return flat_dict
+columns_to_process = ["new_car_detail","new_car_overview","new_car_feature","new_car_specs"]
+structured_data = {}
+
+for col in columns_to_process:
+    flattened_rows = []
+    for row in df_jaipur[col]:
+        row_data = ast.literal_eval(row)
+        flattened_rows.append(flatten_dict(row_data))
+    structured_data[col] = pd.DataFrame(flattened_rows)
+
+# For carlinks, no need to flatten
+structured_data["car_links"] = df_jaipur[["car_links"]].copy()
+
+# Combine all flattened data into a single DataFrame
+jaipur_structured = pd.concat([structured_data["new_car_detail"],
+                      structured_data["new_car_overview"],
+                      structured_data["new_car_feature"],
+                      structured_data["new_car_specs"],
+                      structured_data["car_links"]], axis=1)
+
+# Add a city column
+jaipur_structured["City"] = "jaipur"
+
+# Save the dataframe to a csv file
+jaipur_structured.to_csv(output_data, index=False)
+
+print(jaipur_structured)
+
+
+input_data = "/content/kolkata_cars.xlsx"
+output_data = "/content/kolkata.csv"
+
+
+df_kolkata =pd.read_excel(input_data)
+
+
+def flatten_dict(d, parent_key=''):
+    flat_dict = {}
+
+    for key, value in d.items():
+        new_key = f"{parent_key}_{key}" if parent_key else key
+
+        if isinstance(value, dict):
+            # Recursively flatten nested dictionaries
+            flat_dict.update(flatten_dict(value, new_key))
+
+        elif isinstance(value, list):
+            # Handle lists: flatten dictionaries inside lists
+            for i, item in enumerate(value):
+                if isinstance(item, dict):
+                    flat_dict.update(flatten_dict(item, f'{new_key}_{i}'))
+                else:
+                    flat_dict[f'{new_key}_{i}'] = item
+        else:
+            # For non-dict, non-list values, add them directly
+            flat_dict[new_key] = value
+
+    return flat_dict
+columns_to_process = ["new_car_detail","new_car_overview","new_car_feature","new_car_specs"]
+structured_data = {}
+
+for col in columns_to_process:
+    flattened_rows = []
+    for row in df_kolkata[col]:
+        row_data = ast.literal_eval(row)
+        flattened_rows.append(flatten_dict(row_data))
+    structured_data[col] = pd.DataFrame(flattened_rows)
+
+# For carlinks, no need to flatten
+structured_data["car_links"] = df_kolkata[["car_links"]].copy()
+
+# Combine all flattened data into a single DataFrame
+kolkata_structured = pd.concat([structured_data["new_car_detail"],
+                      structured_data["new_car_overview"],
+                      structured_data["new_car_feature"],
+                      structured_data["new_car_specs"],
+                      structured_data["car_links"]], axis=1)
+
+# Add a city column
+kolkata_structured["City"] = "kolkata"
+
+# Save the dataframe to a csv file
+kolkata_structured.to_csv(output_data, index=False)
+
+print(kolkata_structured)
+
+
+# chennai.drop(columns=["car_links"],inplace=True,axis=1)
+# df_bangalore.drop(columns=["car_links"],inplace=True,axis=1)
+# df_delhi.drop(columns=["car_links"],inplace=True,axis=1)
+# df_hyderabad.drop(columns=["car_links"],inplace=True,axis=1)
+# df_jaipur.drop(columns=["car_links"],inplace=True,axis=1)
+df_kolkata.drop(columns=["car_links"],inplace=True,axis=1)
+
+file_paths =["/content/chennai.xlsx",
+            "/content/delhi.xlsx",
+            "/content/hyderabad.xlsx",
+             "/content/bangalore.xlsx",
+             "/content/jaipur.xlsx",
+             "/content/kolkata.xlsx"]
+
+# Read each CSV file into a DataFrame and store it in a list
+final_dfc= []
+
+for file_path in file_paths:
+    df=pd.read_csv(file_path)
+    final_dfc.append(df)
+
+final_dfc = pd.concat(final_dfc, ignore_index=True)
+
+
+# Define the output path
+output_data = "/content/final_dfc.xlsx"
+
+# Save the combined DataFrame to a CSV file
+final_dfc.to_csv(output_data, index=False)
+
+print("i am ready")
+
+import pandas as pd
+data_car=pd.read_csv("/content/final_dfc.csv")
+
+data_car.head()
+
+data_cr=data_car.copy()
+
+
+data_cr.shape
+
+(data_cr.isnull().sum()/(len(data_cr)))*100
+
+
+threshold=len(data_cr) *0.5   # droping morethan50% null value in column
+data_cr=data_cr.dropna(thresh=threshold, axis =1)
+
+data_cr.shape
+
+
+data_cr.duplicated().sum()
+
+
+data_cr.rename(columns={
+                   'data_0_list_2_value.1': 'Engine CC'},
+                   inplace=True)
+
+
+
+
+import pandas as pd
+
+# Define trans_lower before using it
+trans_lower = ['-', 'na', 'nan', 'null', '', ' ', 'unknown']  # Add any other strings you want to replace with pd.NA
+
+data_cr['Engine CC'] = data_cr['Engine CC'].apply(
+    lambda c: int(c.replace('cc', '').strip()) if 'cc' in str(c).lower()
+    else pd.NA if str(c).strip().lower() in trans_lower else c)
+
+data_cr['Engine CC'] = data_cr['Engine CC'].replace({1197: 1, 998: 2, 1199: 3, 1497: 4, 1248: 5})
+
+data_cr['Engine CC'] = data_cr['Engine CC'].where(data_cr['Engine CC'].isin([1, 2, 3, 4, 5]), 0)
+
+
+# data_cr['model']=data_cr['model'].apply(get_model_name)
+def get_model_name(model):
+    # Convert the input to a string before attempting to split it
+    model = str(model)
+
+    # Check if the string contains a space before attempting to split
+    if ' ' in model:
+        model = model.split(' ')[0]
+    else:
+        # If there is no space, return the original string (or handle it differently)
+        # For example, you could return the original string or a default value:
+        return model # or return 'Unknown'
+
+    return model.strip()
+
+data_cr['model'] = data_cr['model'].apply(get_model_name)
+
+data_cr['model'].unique()
+
+
+def car_mileage(mileage):
+    try:
+        mileage_s=str(mileage).replace("kmpl", "").replace("km/mg", "").strip()
+        mileage_float=float(mileage_s)
+        if mileage_float <100:
+            return mileage_float
+        else:
+            return np.nan
+    except ValueError:
+        return np.nan
+
+
+import numpy as np
+data_cr['Mileage']=data_cr["top_0_value.2"].apply(car_mileage)
+
+
+import re
+import numpy as np
+
+def convert_price(price):
+    # Handle non-string values
+    if not isinstance(price, (str, bytes)):
+        # Attempt conversion to string, handle NaNs
+        try:
+            price = str(price)
+        except ValueError:
+            return np.nan  # or handle differently as needed
+
+    # Remove the currency symbol and commas
+    price = re.sub(r'[₹,]', '', price).strip()
+
+    if 'Crore' in price:
+        price = price.replace('Crore', '').strip()
+        return float(price) * 10000000  # Convert to the base unit (e.g., rupees)
+    elif 'Lakh' in price:
+        price = price.replace('Lakh', '').strip()
+        return float(price) * 100000  # Convert to the base unit (e.g., rupees)
+    elif 'Thousand' in price:
+        price = price.replace('Thousand', '').strip()
+        return float(price) * 1000  # Convert to the base unit (e.g., rupees)
+    else:
+        # Handle potential errors during float conversion
+        try:
+            return float(price)  # Assume it's already in the base unit (e.g., rupees)
+        except ValueError:
+            return np.nan  # or handle differently as needed
+
+data_cr['price'] = data_cr['price'].apply(convert_price)
+
+data_cr['model']
+
+
+mode_gen=data_cr['bt'].mode()[0]  # finding the mode value
+
+
+mode_gen
+
+data_cr['bt'].fillna(data_cr['bt'].mode()[0],inplace=True)
+
+
+data_cr.dropna(subset=['modelYear'], inplace=True)
+
+
+# data_cr['model'].isnull().sum()
+# data_cr['modelYear'].isnull().sum()
+data_cr['centralVariantId'].isnull().sum()
+data_cr['variantName'].isnull().sum()
+
+
+data_cr.isnull().sum()
+
+
+marks_list = data_cr['price'].tolist()
+print(marks_list)
+
+data_cr
+
+
+(data_cr['Mileage'].isnull().sum()/(len(data_cr)))*100
+
+
+data_cr["km"] =data_cr["km"].str.replace("kms","").str.replace(",","").astype(float)
+
+
+data_cr['Mileage'].fillna(data_cr['Mileage'].mean(),inplace=True)
+
+
+seats=data_car.get('top_3_value')   # after changing mileage km/mg  check this cell
+markse=seats.tolist()
+
+AFTER CONVERTING
+PREPARING FOR PREPROCESSING
+
+def car_seats(seats):
+    try:
+        seat_s=re.search(r'\d+', str(seats))
+        if seat_s:
+            seats_int =int(seat_s.group())
+            if seats_int < 10:
+                return seats_int
+            else:
+                return np.nan
+    except (ValueError, TypeError):
+        return np.nan
+
+
+
+data_car["seats"]=data_car["top_3_value"].apply(car_seats)
+
+
+data_car['seats'].isnull().sum()
+
+
+data_car['seats'].fillna(data_car['seats'].mode()[0], inplace = True)
+
+
+data_cr.drop(["top_3_value","top_0_value.2",],axis=1,inplace=True)
+
+
+data_cr.shape
+
+[features for features in data_cr.columns if data_cr[features].isnull().sum()>0]
+
+
+data_cr.duplicated().sum()
+
+
+data_cr['centralVariantId'].isnull().sum()
+
+
+data_cr.rename(columns={'ft':'Fuel_Type', 'bt':'Body_Type','km': 'Kilometer', 'ownerNo' : 'No_of_owners'}, inplace= True)
+
+
+
+
+data_cr['Car_Age'] = data_cr['modelYear'].apply(lambda x: 2024-x)
+
+
+data_cr
+
+
+# prompt: top_5_key.1	 now to rename as seat
+
+data_cr.rename(columns={ 'top_5_key.1':'seats'	}, inplace=True)
+# top_5_key.1
+
+selected_columns= ['model','Body_Type','transmission', 'No_of_owners', 'centralVariantId','modelYear', 'Mileage', 'Engine CC','Fuel_Type', 'Kilometer','price','City','Car_Age']
+
+
+data_cr=data_cr[selected_columns]
+
+
+data_cr
+
+data_cr['centralVariantId']=pd.to_numeric(data_cr['centralVariantId'], errors='coerce')
+data_cr['Engine CC']=pd.to_numeric(data_cr['Engine CC'], errors='coerce')
+
+data_cr.columns
+
+data_corr =data_cr.select_dtypes(include=["int64","float64"])
+
+
+data_corr= data_corr.corr()
+
+
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+plt.figure(figsize=(20,5))
+sns.heatmap(data=data_corr.corr(),annot=True,fmt=".2f",cmap="coolwarm")
+plt.show()
+
+
+ data_cr=data_cr.drop(['Engine CC'], axis =1)
+
+
+output="/content/data_cr.csv"
+data_cr.to_csv(output,index=False)
+
+data_cr.shape
+
+output="/content/data_cr.csv"
+data_cr.to_csv(output,index=False)
+
+
+
+data_cr1=data_cr
+
+eda   Exploratory data analysis (EDA)
+analysis through patterns, understanding relation between with the columns,
+test hypotheses
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+data_cr1.shape
+
+plt.figure(figsize=(16,6))
+sns.boxplot(data=data_cr1)
+plt.show()
+
+
+# Checking for outlier -> Kilometer outlier
+plt.subplots(figsize=(14,7))
+sns.histplot(data_cr1.price, bins=200, kde=True, color = 'b')
+plt.title("Price Distribution", weight="bold",fontsize=20, pad=20)
+plt.ylabel("Count", weight="bold", fontsize=12)
+plt.xlabel("price ", weight="bold", fontsize=12)
+plt.xlim(0,3000000)
+plt.show()
+
+
+sns.boxplot(data=data_cr1, x='Mileage')
+plt.title('Boxplot of Mileage')
+plt.show()
+
+
+
+plt.figure(figsize = (13,5))
+# Change data_cr to data_cr1 to match the DataFrame used in previous cells
+sns.countplot(data = data_cr1, x = 'Fuel_Type')
+plt.show()
+
+# Huge number of cars based petrol fuel type
+plt.figure(figsize = (5,5))
+sns.countplot(data = data_cr1, x = 'transmission')
+plt.show()  # highly available cars are manual
+
+
+plt.figure(figsize =(12,5))      # only petrol type cars based on year count
+sns.countplot(data =data_cr1[data_cr1['Fuel_Type'] == 'Petrol'], x = 'Car_Age')  # only petrol type cars high with 2017 modelyear
+plt.show()
+
+
+data_cr1.head(1)
+
+
+
+sns.pairplot(data_cr1[['No_of_owners', 'Car_Age', 'Mileage', 'Kilometer', 'price']])
+plt.suptitle('Multivariate Analysis', y=1.02)
+plt.show()
+
+
+# Observation
+
+# Petrol - High number of model belong to the year 2017
+sns.scatterplot(data=data_cr1, x='Car_Age', y = 'price')
+plt.title('Relationship between Car_Age and Price')
+plt.show()
+
+
+
+plt.figure(figsize=(10, 6))
+sns.histplot(data_cr1['Mileage'], kde=True)
+plt.title('Mileage Vs price')
+plt.xlabel('Mileage')
+plt.ylabel('price')
+plt.show()
+
+
+sns.countplot(data=data_cr1, x='City')
+plt.title('Distribution of Cars Across Locations')
+plt.xticks(rotation=90)
+plt.show()
+
+
+data_cr1["Body_Type"].value_counts()
+
+
+data_cr1["Body_Type"].isnull().sum()
+
+data_cr.columns
+
+
+
+data_cr.head()
+
+
+
+data_cr.City.value_counts().index
+
+
+data_cr['Body_Type'].nunique()
+
+
+columns_to_convert = ["Kilometer", "price", "modelYear", "centralVariantId", "No_of_owners"]
+data_cr[columns_to_convert] = data_cr[columns_to_convert].astype(int)
+
+
+data_cr
+
+
+data_cr.info()
+
+
+# prompt: how to close the side files in googelcolab
+
+# No code needed to close side files in Google Colab.
+# The file browser panel is separate from the notebook execution environment.
+# You can simply close the file browser tab in your browser.
+
+output_data = "/content/data_train.csv"
+data_cr.to_csv(output_data, index=False)
+
+
+
+***label*** encoding
+
+
+
+
+!pip install scikit-learn
+from sklearn.preprocessing import LabelEncoder
+
+le = LabelEncoder()
+
+import pandas as pd
+from sklearn.preprocessing import LabelEncoder # Import LabelEncoder here
+
+# data_cr=pd.read_csv("/content/data_cr.csv")
+cat_col = data_cr.select_dtypes(include=["object"]).columns
+
+label_encoder_mapping = {}
+for column in cat_col:
+    label_encoder = LabelEncoder()
+    data_cr[column + '_encoded'] = label_encoder.fit_transform(data_cr[column])
+    label_encoder_mapping[column] = dict(zip(label_encoder.classes_, label_encoder.transform(label_encoder.classes_)))
+
+new_df_encoded = pd.get_dummies(data_cr, columns=cat_col, prefix=cat_col)
+
+
+for column, mapping in label_encoder_mapping.items():
+    print(f"{column} Mapping:")
+    print(mapping)
+    print()
+
+
+from sklearn.preprocessing import LabelEncoder # Import LabelEncoder here
+
+for i in data_cr.select_dtypes(include=["object"]).columns:
+  le=LabelEncoder()# Initialize LabelEncoder inside the loop
+  data_cr[i]=le.fit_transform(data_cr[i])
+
+
+data_cr
+
+data_cr.dtypes
+
+
+
+
+import numpy as np
+data_cr['Kilometer'] = np.log1p(data_cr['Kilometer'])
