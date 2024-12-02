@@ -1,0 +1,249 @@
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+!pip install scikit-learn
+
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.ensemble import ExtraTreesRegressor,RandomForestRegressor,GradientBoostingRegressor
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import r2_score
+
+import pandas as pd
+data_car=pd.read_csv("C:/Users/arulselvi/OneDrive/Desktop/final cardekho/data_final.csv")
+data_cr1=data_car
+x = data_cr1.drop('price',axis=1)
+y = data_cr1['price']
+
+plt.figure(figsize=(15,5))
+sns.heatmap(data=data_cr1.corr(),annot=True,fmt=".2f",cmap="coolwarm")
+plt.show()
+
+def model_regression(x,y,algorithm):
+    for i in algorithm:
+        xtrain,xtest,ytrain,ytest = train_test_split(x,y,test_size=0.3, random_state=42)
+        model = i().fit(xtrain,ytrain)
+        # predict for train and test accuracy # Predicts the target variable for both the training and testing sets using the trained model
+        y_train_pred = model.predict(xtrain)
+        y_test_pred  = model.predict(xtest)
+
+       # Accuracy score
+        training = r2_score(ytrain,y_train_pred)
+        testing = r2_score(ytest,y_test_pred)
+        data = {'Algorithm':i.__name__, 'Training R2 Score':training,'Testing R2 Score':testing}
+        print(data)
+
+model_regression(x,y,[ExtraTreesRegressor,RandomForestRegressor,GradientBoostingRegressor,LinearRegression])
+
+# gradient.fit(x,y)
+# Assuming X and y are your features and target from previous cell
+from sklearn.model_selection import train_test_split # Import train_test_split if not already imported
+
+EXTRA = ExtraTreesRegressor(random_state=42)
+
+# Split the data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=0.3, random_state=42) # Added this line to split the data
+
+# Fit the model using the correct data (X_train, y_train)
+EXTRA.fit(X_train, y_train)  # Changed from x, y to X_train, y_train
+
+# You can then predict on your test data
+# predictions = gradient.predict(X_test)
+EXTRA.feature_importances_
+
+EXTRA_score=pd.DataFrame({
+    "columns":x.columns,
+    "score":EXTRA.feature_importances_
+}).sort_values("score",ascending=False).head(11)
+EXTRA_score
+
+
+list(EXTRA_score.sort_values("score",ascending=False).head(11)["columns"].values)
+selected_features =list(EXTRA_score.sort_values("score",ascending=False).head(11)["columns"].values)
+
+x = x[selected_features]
+x
+# GradientBoostingRegressor
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=42)
+gbr = GradientBoostingRegressor(random_state=42)
+gbr_model=gbr.fit(x_train,y_train)
+
+
+# r2_score(y_train,gbr_tr_predict)
+from sklearn.metrics import r2_score # Import the r2_score function
+
+gbr_tr_predict=gbr_model.predict(x_train)
+gbr_ts_predict=gbr_model.predict(x_test)
+
+r2_score(y_train,gbr_tr_predict) # Now you can use r2_score
+# r2_score(y_test,gbr_ts_predict)
+
+from sklearn.metrics import mean_squared_error # Import the mean_absolute_error function
+
+mean_squared_error(y_train,gbr_tr_predict)
+
+# mean_absolute_error(y_test,gbr_ts_predict)
+from sklearn.metrics import mean_absolute_error # Import the mean_absolute_error function
+
+mean_absolute_error(y_test, gbr_ts_predict) # Now you can use mean_absolute_error
+r2_score(y_test,gbr_ts_predict)
+
+import matplotlib.pyplot as plt
+import seaborn as sns
+plt.figure(figsize=(20,7))
+sns.scatterplot(x=y_test,y=gbr_ts_predict)
+plt.plot([y_test.min(),y_test.max()],[y_test.min(),y_test.max()],color="blue",lw=2)
+plt.xlabel("Actual Price")
+plt.ylabel("Predicted Price")
+plt.title("Actual vs Predicted Price")
+plt.show()
+
+ExtraTreesRegressor
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=42)
+extra_model = ExtraTreesRegressor(random_state=70).fit(x_train,y_train)
+extra_model
+etrain_pred = extra_model.predict(x_train)
+
+
+etest_pred=extra_model.predict(x_test)
+
+from sklearn.metrics import mean_squared_error, mean_absolute_error # Import both functions
+etrain_predict = extra_model.predict(x_train)
+etest_predict = extra_model.predict(x_test)
+
+# Now you can calculate the mean squared error
+mse_train = mean_squared_error(y_train, etrain_predict)
+print(f"Training MSE: {mse_train}")
+
+# Optional: Calculate and print MSE for the test set
+mse_test = mean_squared_error(y_test, etest_predict)
+print(f"Testing MSE: {mse_test}")
+
+# Calculate Mean Absolute Error
+mae_train = mean_absolute_error(y_train, etrain_predict) # Call the imported mean_absolute_error function
+print(f"Training MAE: {mae_train}")
+
+mae_test = mean_absolute_error(y_test, etest_predict)
+print(f"Testing MAE: {mse_test}")
+
+r2_score(y_train,etrain_pred)
+
+r2_score(y_test,etest_pred)
+
+from xgboost import XGBRegressor
+model=XGBRegressor(n_estimators=300,max_depth=100,random_state=47)
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.3, random_state=42)
+XGB_model=model.fit(x_train,y_train)
+
+XGB_model
+XGB_predict=XGB_model.predict(x_train)
+XGB_predict=XGB_model.predict(x_test)
+
+from sklearn.metrics import mean_squared_error, mean_absolute_error
+
+# Predict for both training and testing sets, but store them in separate variables
+XGB_predict_train = XGB_model.predict(x_train)  # Store training predictions
+XGB_predict_test = XGB_model.predict(x_test)   # Store testing predictions
+
+# Now calculate MSE and MAE using the appropriate predictions
+mse_train = mean_squared_error(y_train, XGB_predict_train)
+print(f"Training MSE: {mse_train}")
+
+mse_test = mean_squared_error(y_test, XGB_predict_test)
+print(f"Testing MSE: {mse_test}")
+
+mae_train = mean_absolute_error(y_train, XGB_predict_train)
+print(f"Training MAE: {mae_train}")
+
+mae_test = mean_absolute_error(y_test, XGB_predict_test) #call the imported function for testing mae
+print(f"Testing MAE: {mae_test}")
+from sklearn.metrics import r2_score
+
+# Assuming XGB_predict_train and XGB_predict_test are calculated as in the previous cell
+# Calculate R^2 for training set
+r2_train = r2_score(y_train, XGB_predict_train)
+print(f"Training R^2: {r2_train}")
+
+# Calculate R^2 for testing set
+r2_test = r2_score(y_test, XGB_predict_test)
+print(f"Testing R^2: {r2_test}")
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Assuming XGB_predict_test contains the predictions for the test set
+plt.figure(figsize=(20,7))
+sns.scatterplot(x=y_test, y=XGB_predict_test)  # Use XGB_predict_test here
+plt.plot([y_test.min(),y_test.max()],[y_test.min(),y_test.max()],color="blue",lw=2)
+plt.xlabel("Actual Price")
+plt.ylabel("Predicted Price")
+plt.title("Actual vs Predicted Price")
+plt.show()
+RandomForestRegressor
+random=RandomForestRegressor(n_estimators=300,max_depth=100,random_state=47)
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=42)
+
+random_model=random.fit(x_train,y_train)
+random_model
+
+from sklearn.metrics import mean_squared_error, mean_absolute_error
+
+# Predict for both training and testing sets, but store them in separate variables
+random_model_train = random_model.predict(x_train)  # Store training predictions
+random_model_test = random_model.predict(x_test)   # Store testing predictions
+
+# Now calculate MSE and MAE using the appropriate predictions
+mse_train = mean_squared_error(y_train, random_model_train)
+print(f"Training MSE: {mse_train}")
+
+mse_test = mean_squared_error(y_test, random_model_test)
+print(f"Testing MSE: {mse_test}")
+
+mae_train = mean_absolute_error(y_train, random_model_train)
+print(f"Training MAE: {mae_train}")
+
+mae_test = mean_absolute_error(y_test, random_model_test) #call the imported function for testing mae
+print(f"Testing MAE: {mae_test}")
+
+from sklearn.metrics import r2_score
+
+# Assuming XGB_predict_train and XGB_predict_test are calculated as in the previous cell
+# Calculate R^2 for training set
+r2_train = r2_score(y_train, random_model_train)
+print(f"Training R^2: {r2_train}")
+
+# Calculate R^2 for testing set
+r2_test = r2_score(y_test, random_model_test)
+print(f"Testing R^2: {r2_test}")
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Assuming 'random_model' is your fitted model
+# Predict on the test data to get the predicted values
+random_model_predictions = random_model.predict(x_test)
+
+plt.figure(figsize=(28, 7))
+# Use 'random_model_predictions' for the y-axis
+sns.scatterplot(x=y_test, y=random_model_predictions)
+plt.plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], color="blue", lw=2)
+plt.xlabel("Actual Price")
+plt.ylabel("Predicted Price")
+plt.title("Actual vs Predicted Price")
+plt.show()
+import pickle
+
+# Specify the output path
+output_data = "extra_model.pkl"  # Save in the current directory or provide a full path.
+
+# Save the model
+with open(output_data, 'wb') as file:
+    pickle.dump(extra_model, file)
+
+print(f"Model saved as {output_data}")
+
+
+
+
+
